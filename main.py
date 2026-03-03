@@ -1,7 +1,7 @@
 import time
 from turtle import Screen
 from player import Player
-from car_manager import CarManager
+from car_manager import Carmanager
 from scoreboard import Scoreboard
 
 screen = Screen()
@@ -10,8 +10,8 @@ screen.title("Turtle Crossing")
 screen.tracer(0)
 
 player = Player()
-car = CarManager()
-
+car = Carmanager()
+score = Scoreboard()
 screen.listen()
 screen.onkey(player.move, "w")
 
@@ -19,21 +19,20 @@ game_over= False
 while not game_over:
     time.sleep(0.1)
     screen.update()
-    car.create_car()
-    car.move()
+    car.create_car() #generate cars
+    car.move() #make car move
 
     # IF TURTLE HITS A CAR
-    if player.distance(car) < 25:
-        game_over= True
+    for i in car.all_cars:
+        if player.distance(i) < 25:
+            score.game_over()
+            game_over= True
 
     # IF PLAYER GET TO THE OTHER SIDE
     if player.ycor() >= 280:
         player.game_reset()
+        score.increase_score()
         car.increase_speed()
-
-
-
-
 
 screen.exitonclick()
 
